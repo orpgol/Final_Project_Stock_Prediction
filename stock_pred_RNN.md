@@ -190,7 +190,7 @@ t, aapl
 ### Adding my Predicator
 For the next step, i will be adding a predicator to be predicted by the model.
 Since percentage return in not evenly distributed, and i cannot predict the next 'Close' of a stock without some 
-corespondence to the sequence, i will use 'log returns' as a predicator.
+normalization to the sequence, i will use 'log returns' as a predicator. Log return are the normalization of the change between a day and the previuos day.
 
 Read about log returns here:  [Why log returns?](https://quantivity.wordpress.com/2011/02/21/why-log-returns/)
 
