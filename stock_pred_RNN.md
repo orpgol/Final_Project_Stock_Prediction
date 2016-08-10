@@ -11,13 +11,11 @@ Date    Open	High	Low	Close
 Let's begin:
 
 
-```python
 ### importing 
 For the task at hand, i have chosen to work with tensorflow, mainly for the experience and to learn one of the newer
 libreries out there.
 in addition, i am using pandas for data manipulation and numpy as a linear algebra library.
 Also, i will plot all the relavent data with matplotlib.
-```
 
 
 ```python
@@ -36,11 +34,10 @@ from tensorflow.python.ops import rnn, rnn_cell
 ```
 
 
-```python
 ### Pre process
 i will begin with removing the 'date' column as it will have no effect on the results. 
 Also, the data we got is inverse, as the latest date was displayed first. Let's invert that as well.
-```
+
 
 
 ```python
@@ -190,14 +187,12 @@ t, aapl
 
 
 
-```python
 ### Adding my Predicator
 For the next step, i will be adding a predicator to be predicted by the model.
 Since percentage return in not evenly distributed, and i cannot predict the next 'Close' of a stock without some 
 corespondence to the sequence, i will use 'log returns' as a predicator.
 
-Read about log returns here:  https://quantivity.wordpress.com/2011/02/21/why-log-returns/
-```
+Read about log returns here:  [Why log returns?](https://quantivity.wordpress.com/2011/02/21/why-log-returns/)
 
 
 ```python
@@ -391,9 +386,8 @@ t.describe()
 
 
 
-```python
 ### The two stocks side by side
-```
+
 
 
 ```python
@@ -405,14 +399,13 @@ _ = pd.concat([aapl['Close'], t['Close']], axis=1).plot(figsize=(20, 15))
 
 
 
-```python
 ### Log returns
 Although the two stock are not really connected to each other, as we can see in the above grahp, their log returns will
 be somewhat connected. 
 Since the two stocks are in the same stock exchange they will have little siilarity in the normalized version of the 
 movement.
 The log return plot:
-```
+
 
 
 ```python
@@ -425,12 +418,12 @@ _ = pd.concat([aapl['log_return'],
 
 
 
-```python
+
 #### Pre Processing the labels
 For prediction purposses, i will split the log returns into categories to be predicted by the machine,
 i am rounding the log returns to the nearest 100th and let these be our classes.
 Also i normalize for tensorflow to be happy.
-```
+
 
 
 ```python
@@ -746,10 +739,10 @@ classes_tf, classes_tf2
 
 
 
-```python
+
 ##### Create Test and Train 
 Here we will seperate the data into 80 percent train and 20 percent test
-```
+
 
 
 ```python
@@ -941,13 +934,13 @@ training_predictors_tf2.describe()
 
 
 
-```python
+
 ## Tensor flow model building
 For the first part, i will try to use a simple NN just to see if i can get some predictions using the simplest model.
 This will tell me if i have something that could be learned or if i should go back and change the data.
 The model i will use here is a simple softmax of the linear case (X * W + b)
 Also, for training we will use an optimizer to reduce cost, which is the sum of errors.
-```
+
 
 
 ```python
@@ -982,11 +975,11 @@ sess.run(init)
 ```
 
 
-```python
+
 ### running the test model
 Running the training model while printing the progress we can see that the there is some improvement going forward.
 This shows me that using the limited data i have, could actully be used to predict to some level.
-```
+
 
 
 ```python
@@ -1020,11 +1013,11 @@ for i in range(1, 30001):
 
 
 
-```python
+
 ### running the Test case
 Making sure we are not overfitted to the train, we can see that the test yielded 45% accuracy! 
 That's pretty cool, considering we have something like 28 possible log return outcomes...
-```
+
 
 
 ```python
@@ -1041,7 +1034,7 @@ print ("Test accuracy:" ,sess.run(
 
 
 
-```python
+
 ## Building a second Deep Learning RNN Machine
 So we know we can do some predicting with limited data and a limited machine.
 I will now use a recursive machine to learn and produce a made up sequence for each of the stocks, and then compare them
@@ -1049,7 +1042,7 @@ to the original stock.
 
 I order to do this i will use a three level deep RNN machine still based on the same softmax model + cost function.
 The following RNN machine learns the aapl stock ticker
-```
+
 
 
 ```python
@@ -1128,11 +1121,11 @@ print ("Test accuracy:" ,sess1.run(
 
 
 
-```python
+
 ### Producing our made up sequence and concverting back into Close prices
 Here we will use the Tensor to use the pure model ( no optimizer ) for producing a the made up sequence by predicting
 the log return for each day, based on all the data we had for all previous days.
-```
+
 
 
 ```python
@@ -1145,12 +1138,12 @@ with tf.Session() as sess:
 ```
 
 
-```python
+
 ### From logs to close
 After we got the made-up log returns, we will use the aapl data of all previous points of time, to produce a new
 predicted 'close' price.
 In other words, i regard each data point as if it is TODAY, and i'm trying to produce TOMMOROW's prediction
-```
+
 
 
 ```python
@@ -1181,11 +1174,11 @@ _ = pd.concat([df['made_up_close'], aapl['Close'].shift()[:training_set_size]], 
 
 
 
-```python
+
 #### Now i will build the model for AT&T and produce a new Table.
 notice i changed the aplha (learning rate) and the stddev of the weights since the model was constantly overshooting 
 the global minimum...
-```
+
 
 
 ```python
@@ -1273,11 +1266,11 @@ df = df.fillna(0)
 ```
 
 
-```python
+
 #### AT&T Results!
 In the next diagram you can see that the AT&T model came out conservative as well.
 Hoever you can see that the corelation exists as in the first example.
-```
+
 
 
 ```python
@@ -1289,14 +1282,14 @@ _ = pd.concat([df['made_up_close'], t['Close'].shift()[:training_set_size2]], ax
 
 
 
-```python
+
 ## LTSM
 Here i tried to make an even more complicated model using LSTM machine with bidirectional RNN's with forgetfullness.
 I was not able to produce good results so far, but this will definitly be my next step in this area.
 To use the bidirectional model i enter a tensor of mini batches of the input. for some reason this model does not train
 as well as the simpler models. I suspect that the forgetfullness entail the need for many more samples then i have 
 scraped so far...
-```
+
 
 
 ```python
@@ -1441,9 +1434,9 @@ with tf.Session() as sess:
 
 
 
-```python
+
 #### The result shape from this model
-```
+
 
 
 ```python
@@ -1475,7 +1468,7 @@ with tf.Session() as sess:
 
 
 
-```python
+
 #### Summery:
 Stock prediction is a very overflowing subject. However i believe that the latest advances in NN and especially
 RNN's and LSTM's could mean a sugnificant step forward.
@@ -1483,4 +1476,4 @@ The benifits of predicting with great precission where a stock will be tommorow 
 In addition to wether or not predicting a stock movement is profitable, i think that prediction made on a stock could 
 also pave the way into ceating an important service for the unequiped public to have a better chance in evaluating 
 the market, and level the playing field with the pro's.
-```
+
