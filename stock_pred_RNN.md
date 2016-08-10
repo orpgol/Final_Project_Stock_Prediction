@@ -1397,7 +1397,7 @@ with tf.Session() as sess:
         step += 1
     print ("Optimization Finished!")
 
-    # Calculate accuracy for 128 mnist test images
+    # Calculate accuracy
     test_data = np.array([test_predictors_tf.as_matrix()]).reshape((-1, n_steps, n_input))
     test_label = test_classes_tf.as_matrix()
     print ("Testing Accuracy:", \
